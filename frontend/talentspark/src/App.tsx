@@ -3,58 +3,54 @@ import NavBar from "./components/NavBar";
 import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import Footer from "./components/Footer";
-import { useEffect, useState } from "react";
+import { useEffect,useState } from "react";
 import { getCompanies } from "./Services/CompanyService";
-import type { company } from "./types/company";
+import type { Company } from "./types/company";
 
-function App() {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [companies, setCompanies] = useState<company[]>([]);
 
-  async function fetchCompanies() {
+function App(){
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState<Error | null>(null)
+  const [companies,setCompanies]=useState<Company[]>([]);
+
+  async function fetchCompanies(){
     setLoading(true);
-
-    try {
-      const data = await getCompanies();
-      setCompanies(data);
-    } catch (err) {
-      setError(err as Error);
+    try{
+      const companies=await getCompanies();
+      setCompanies(companies);
+    } catch (error){
+      setError(error as Error);
     } finally {
       setLoading(false);
     }
+
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     fetchCompanies();
-  }, []);
+  },[]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  return (
-    <>
-      <Welcome />
-      <NavBar />
-
-      <br />
-
-      {companies.map((company) => (
-        <CompanyCard
-          key={company.id}
-          company={company}
-        />
-      ))}
-
-      <JobCard />
-      <Footer />
-    </>
-  );
+if (loading){
+  return <div>Loading..</div>
 }
 
-export default App;
+if (error){
+  return<div>Error:{error.message}</div>
+}
+  return(
+  <>
+    <NavBar/>
+    <Welcome/>
+    <br />
+
+    <CompanyCard
+      companies={companies}
+    />
+
+    <JobCard/>
+    <Footer/>
+  </>
+)
+}
+
+export default App
