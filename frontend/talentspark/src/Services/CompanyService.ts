@@ -7,3 +7,17 @@ export async function getCompanies(): Promise<Company[]> {
     const response = await axios.get(`${API_BASE_URL}/company`);
     return response.data;
 }
+
+export async function getCompany(id:number):Promise<Company>{
+    const response=await axios.get(`${API_BASE_URL}/company/${id}`);
+    return response.data;
+}
+
+export async function CreateCompany(company:Company):Promise<Company>{
+    const response=await axios.post(`${API_BASE_URL}/company`,company);
+    return response.data;
+}
+export async function UpdateCompany(id:number,company:Company):Promise<Company>{
+    const response=await axios.put(`${API_BASE_URL}/company/${id}`,company);
+    return response.data;
+}
