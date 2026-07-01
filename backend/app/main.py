@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-
-from routers import company,job,auth
+from routers import company,job
 from database import Base,engine
-from models import company as company_model,job as job_model,users as user_model
+from models import company as company_model,job as job_model
 from fastapi.middleware.cors import CORSMiddleware
+from models.users import User
 
 app=FastAPI()
 app.add_middleware(
@@ -13,9 +13,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-print(engine)
-Base.metadata.create_all(bind=engine)
-app.include_router(auth.router)
+#Base.metadata.create_all(bind=engine)
 app.include_router(company.router)
 app.include_router(job.router)
 
@@ -25,3 +23,7 @@ def read_root():
 @app.get("/about")
 def read_about():
     return {"about":"this is about page"}
+
+@app.get("/contact")
+def read_contact():
+    return {"contact":"this is contact page"}
