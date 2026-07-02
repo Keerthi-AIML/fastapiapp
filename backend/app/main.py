@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from routers import company,job
-from database import Base,engine
-from models import company as company_model,job as job_model
 from fastapi.middleware.cors import CORSMiddleware
-from models.users import User
+
+from backend.database import Base, engine
+from backend.models import company as company_model, job as job_model
+from backend.models.users import User
+from backend.routers import auth, company, job
 
 app=FastAPI()
 app.add_middleware(
@@ -14,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 #Base.metadata.create_all(bind=engine)
+app.include_router(auth.router)
 app.include_router(company.router)
 app.include_router(job.router)
 
