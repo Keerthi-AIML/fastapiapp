@@ -1,12 +1,19 @@
+import os
+import sys
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 from backend.database import Base, engine
 from backend.models import company as company_model, job as job_model
 from backend.models.users import User
 from backend.routers import auth, company, job
 
-app=FastAPI()
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
