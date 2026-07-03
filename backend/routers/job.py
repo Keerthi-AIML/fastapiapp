@@ -4,12 +4,12 @@ from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.models.job import Job
 from backend.schemas.job import JobCreate, JobUpdate, JobResponse
-
+from backend.utils.oauth2 import get_current_user, role_required
 router = APIRouter(prefix="/job",tags=["Job"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=JobResponse)
-def create_job(job: JobCreate, db: Session = Depends(get_db)):
+def create_job(job: JobCreate, db: Session = Depends(get_db), current_user=Depends(role_required(["admin","hr"]))):
     new_job = Job(**job.model_dump())
     db.add(new_job)
     db.commit()
@@ -18,13 +18,13 @@ def create_job(job: JobCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=list[JobResponse])
-def get_all_jobs(db: Session = Depends(get_db)):
+def get_all_jobs(db: Session = Depends(get_db),current_user=Depends(role_required(["admin","hr"]))):
     jobs = db.query(Job).all()
     return jobs
 
 
 @router.get("/{job_id}", status_code=status.HTTP_200_OK, response_model=JobResponse)
-def get_job(job_id: int, db: Session = Depends(get_db)):
+def get_job(job_id: int, db: Session = Depends(get_db),current_user=Depends(role_required(["admin","hr"]))):
     job = db.query(Job).filter(Job.id == job_id).first()
 
     if job is None:
@@ -45,7 +45,7 @@ def update_job(job_id: int, updated_job: JobUpdate, db: Session = Depends(get_db
     return job
 
 @router.delete("/{job_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_job(job_id: int, db: Session = Depends(get_db)):
+def delete_job(job_id: int, db: Session = Depends(get_db),current_user=Depends(role_required(["admin"]))):
     job = db.query(Job).filter(Job.id == job_id).first()
 
     if job is None:
