@@ -1,38 +1,24 @@
-import os
-import sys
-
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from database import Base, engine
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
+# Import routers
+from routers import auth, company, job
 
-from backend.database import Base, engine
-from backend.models import company as company_model, job as job_model
-from backend.models.users import User
-from backend.routers import auth, company, job
-
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# Create FastAPI app
+app = FastAPI(
+    title="FastAPI Job Portal API",
+    version="1.0.0"
 )
-#Base.metadata.create_all(bind=engine)
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
+# Include routers
 app.include_router(auth.router)
 app.include_router(company.router)
 app.include_router(job.router)
 
+# Root endpoint
 @app.get("/")
-def read_root():
-    return {"hello":"world"}
-@app.get("/about")
-def read_about():
-    return {"about":"this is about page"}
-
-@app.get("/contact")
-def read_contact():
-    return {"contact":"this is contact page"}
+def root():
+    return {"message": "FastAPI is running successfully!"}
