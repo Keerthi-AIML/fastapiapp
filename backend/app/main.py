@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from database import Base, engine
 
 # Import routers
-from routers import auth, company, job
+from routers import auth, company, job,chat,rag
 
 # Create FastAPI app
 app = FastAPI(
@@ -17,6 +17,8 @@ Base.metadata.create_all(bind=engine)
 app.include_router(auth.router)
 app.include_router(company.router)
 app.include_router(job.router)
+app.include_router(chat.router)
+app.include_router(rag.router)
 
 # Root endpoint
 @app.get("/")
