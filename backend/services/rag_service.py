@@ -1,9 +1,8 @@
 import os
-from urllib import response
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
-from services.qdrant_service import search_jobs
+from services.qdranta_service import search_jobs
 
 load_dotenv()
 
@@ -14,12 +13,15 @@ llm = ChatGroq(
 )
 
 rag_prompt = ChatPromptTemplate.from_messages([
-    ( "system","""You are a job search assistant.
+    (
+        "system",
+        """
+You are a job search assistant.
 Use the following job listings retrieved from the database to answer the user's question.
 If no relevant jobs are found, say so clearly.
 
 Retrieved Jobs:
-{jobs}
+{context}
         """
     ),
     (
@@ -28,7 +30,7 @@ Retrieved Jobs:
     )
 ])
 
-chain = rag_prompt | llm
+rag_chain = rag_prompt | llm
 def rag_job_search(question: str) -> str:
     results = search_jobs(question, top_k=5)
 
@@ -43,5 +45,6 @@ def rag_job_search(question: str) -> str:
         f"(Salary: {r['salary']}, Match: {r['score']})"
         for r in results
     ])
+    
     response=rag_chain.invoke({"context": context, "question": question})
     return response.content

@@ -1,4 +1,4 @@
- import os
+import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
@@ -12,20 +12,21 @@ llm = ChatGroq(
 )
 
 resume_prompt = ChatPromptTemplate.from_messages([
-    ( "system","""You are a professional resume analyser.
+    (
+        "system",
+        """You are a professional resume analyser.
 Analyze the given resume text and provide:
 1. Key skills found
 2. Experience Level
 3. Strengths 
 4. Areas to Improve
 5. Suggested Job Roles
-keep the analysis short and structured."""),
-    (
-        "human",
-        "{resume_text}"
-    ),
+Keep the analysis short and structed """ ),
+    ("human", "{resume_text}")
 ])
+
 resume_chain = resume_prompt | llm
-def analyze_resume(resume_text: str) -> str:
+
+def analyse_resume(resume_text: str) -> str:
     response = resume_chain.invoke({"resume_text": resume_text})
-    return response.content 
+    return response.content

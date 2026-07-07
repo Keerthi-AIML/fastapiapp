@@ -1,4 +1,4 @@
-fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas.rag import (
@@ -9,7 +9,7 @@ from schemas.rag import (
     JobSearchRequest, SemanticSearchResponse, SemanticSearchResult
 )
 from services.resume_service import analyse_resume
-from services.qdrant_service import embed_all_jobs, search_jobs, match_jobs_for_profile
+from services.qdranta_service import embed_all_jobs, search_jobs,match_jobs_for_profile
 from services.rag_service import rag_job_search
 
 router = APIRouter(prefix="/rag", tags=["RAG"])
