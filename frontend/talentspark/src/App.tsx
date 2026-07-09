@@ -2,15 +2,15 @@ import NavBar from "./components/NavBar";
 import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import Footer from "./components/Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { getCompanies, updateCompany, deleteCompany, createCompany } from "./Services/CompanyService";
 import { getJobs, updateJob, deleteJob, createJob } from "./Services/JobService";
 import type { Company } from "./types/company"
 import type { Job } from "./types/job"
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Chat from "./pages/Chat";
-import ResumeAnalyser from "./pages/ResumeAnalyser";
+import Chat from "./pages/chat";
+import ResumeAnalyser from "./pages/Resumeanalyser";
 import JobMatch from "./pages/JobMatch";
 
 
@@ -138,7 +138,7 @@ function App() {
   }
   return (
     <>
-      <NavBar currentPage={currentPage} onNavigate={setCurrentPage} />
+      <NavBar onNavigate={setCurrentPage} />
       {currentPage === "home" && (
         <>
           <CompanyCard

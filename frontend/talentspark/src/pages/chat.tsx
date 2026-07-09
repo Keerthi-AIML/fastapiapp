@@ -2,6 +2,8 @@ import { useState } from "react";
 import { askCareerChat } from "../Services/ChatService";
 import type { ChatMessage } from "../types/chat";
 
+
+
 function Chat() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState("");

@@ -15,7 +15,7 @@ router = APIRouter(prefix="/auth",tags=["Auth"])
 async def register(user:UserCreate,db:AsyncSession = Depends(get_db)):
     try:
         result = await db.execute(select(User).filter(User.email == user.email))
-        existing_user = result.scalar().first()
+        existing_user = result.scalars().first()
         if existing_user:
             raise HTTPException(status_code=400,detail="Email already exists")
         hashed_password=hash_password(user.password)
@@ -42,7 +42,7 @@ async def register(user:UserCreate,db:AsyncSession = Depends(get_db)):
 async def login(form_data:OAuth2PasswordRequestForm=Depends(),db:AsyncSession = Depends(get_db)):
     try:
         result = await db.execute(select(User).filter(User.email == form_data.username))
-        existing_user = result.scalar().first()
+        existing_user = result.scalars().first()
         if not existing_user:
             raise HTTPException(status_code=404,detail="User not found")
         if not verify_password(form_data.password,existing_user.hashed_password):
